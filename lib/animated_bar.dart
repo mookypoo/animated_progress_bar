@@ -22,23 +22,11 @@ class _AnimatedBarState extends State<AnimatedBar> with TickerProviderStateMixin
     super.initState();
     this._countAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600))
       ..addListener(() async {
-        /// need to set state because the bar's width
-        /// can do this as well :
-        /// if (this._barAnimationController.isAnimating) this.setState(() {}); /// to start animation
-        /// but if set state, it rebuilds this whole widget --> I want to only rebuild Bar() widget in builder below
-        /// and to do that, I am change the value of the "count2" in count provider and notifying its listener
-        /// and within the buidler below, which only listens to count2, only that bar rebuilds, not this whole animation bar
-        /// which includes the stamp, the 2 / 7, and the add/remove icon button
         if (this._countAnimationController!.isAnimating) {
           context.read<CountProvider>().changeCount(this._countAnimation!.value);
         }
-        ///
         if (this._countAnimationController!.isCompleted) {
           context.read<CountProvider>().changeCount(this._countAnimation!.value);
-          if (this._countAnimation?.value == 7.0)
-            //if (this._barAnimationController!.status == AnimationStatus.forward) this.setState(() {}); /// to start animation
-            //if (this._barAnimationController!.status == AnimationStatus.completed) {
-            this.setState(() {});
           if (context.read<CountProvider>().count2 == 7) {
             await showDialog(
               context: context,
